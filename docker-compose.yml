@@ -19,6 +19,8 @@ services:
       - "80:80"
     volumes:
       - ./phpSrc:/var/www/html
+      #mount không cần thiết
+      - ./docker/nginx/:/etc/nginx/conf.d/
     networks:
       - php-network
   db:

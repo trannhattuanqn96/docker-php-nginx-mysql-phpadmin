@@ -1,2 +1,2 @@
 FROM nginx:stable-alpine
-ADD default.nginx.conf /etc/nginx/conf.d/default.conf
+# ADD default.conf /etc/nginx/conf.d/default.conf
