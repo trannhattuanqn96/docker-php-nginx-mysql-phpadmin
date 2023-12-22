@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  php:
+    container_name: php
+    build: ./docker/php
+    working_dir: /var/www/html
+    volumes:
+      - ./phpSrc:/var/www/html
+    environment:
+      PHP_EXTENSION_XDEBUG: 1
+    
+    networks:
+      - php-network
+  nginx:
+    container_name: nginx
+    build: ./docker/nginx
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./phpSrc:/var/www/html
+    networks:
+      - php-network
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=testphp
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+    # volumes:
+    #   - ./mysql/mysql_data:/var/lib/mysql/
+    #   - ./mysql/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3306:3306"
+    networks:
+      - php-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "9001:80"
+    environment:
+      MYSQL_USERNAME: laravel
+      MYSQL_ROOT_PASSWORD: laravel
+      PMA_HOST: db
+    networks:
+      - php-network
+  #Docker Networks
+networks:
+  php-network:
+    driver: bridge
